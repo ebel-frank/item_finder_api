@@ -40,7 +40,7 @@ app.get('/api/location', async (req, res) => {
 
 
 // Endpoint to toggle LED
-app.put('/api/toggle_led', async (req, res) => {
+app.get('/api/toggle_led', async (req, res) => {
     try {
         const item = await ItemFinder.findOne();
         const updatedItem = await ItemFinder.findOneAndUpdate(
@@ -68,7 +68,7 @@ app.get('/api/led', async (req, res) => {
 
 
 // Endpoint to toggle BUZZER
-app.put('/api/toggle_buzzer', async (req, res) => {
+app.get('/api/toggle_buzzer', async (req, res) => {
     try {
         const item = await ItemFinder.findOne();
         const updatedItem = await ItemFinder.findOneAndUpdate(
