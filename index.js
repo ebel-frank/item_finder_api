@@ -2,10 +2,12 @@ require('dotenv').config();
 const mongoose = require('mongoose')
 const express = require('express')
 const ItemFinder = require('./ItemFinder')
+const faceDetectorRoute = require('./face_detector')
 
 const app = express()
 
 app.use(express.json())
+app.use(faceDetectorRoute)
 const PORT = 5000
 
 // Endpoint to POST location
@@ -35,10 +37,6 @@ app.get('/api/location', async (req, res) => {
     }
 })
 
-
-
-
-
 // Endpoint to toggle LED
 app.get('/api/toggle_led', async (req, res) => {
     try {
@@ -63,9 +61,6 @@ app.get('/api/led', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 })
-
-
-
 
 // Endpoint to toggle BUZZER
 app.get('/api/toggle_buzzer', async (req, res) => {
@@ -92,21 +87,7 @@ app.get('/api/buzzer', async (req, res) => {
     }
 })
 
-// Add new ItemFinder API
-// app.post('/itemfinder', async (req, res) => {
-//     const latitude = 9.53281832529;
-//     const longitude = 6.44219675432;
-//     const led_state = false;
-//     const buzzer_state = false;
 
-//     try {
-//         const newItem = new ItemFinder({ longitude, latitude, led_state, buzzer_state });
-//         await newItem.save();
-//         res.status(201).json(newItem);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// });
 
 // connect to mongodb
 mongoose.connect(process.env.MONGODB_URI)
