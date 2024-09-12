@@ -1,5 +1,5 @@
 var admin = require("firebase-admin");
-var serviceAccount = require("./serviceaccountkey.json");
+var serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose');
