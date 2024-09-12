@@ -48,8 +48,8 @@ router.get('/api/verify_face', async (req, res) => {
             }
         }
         res.status(200).json({'prediction': uid == userId}) // check if the userId of the predicted embeddings is same as actual user id
-    } catch (e) {
-
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 })
 
