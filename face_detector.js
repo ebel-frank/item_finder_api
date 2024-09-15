@@ -27,21 +27,20 @@ async function loadFirestoreData() {
     })
 }
 
-
 loadFirestoreData()
 
-
 router.get('/api/verify_face', async (req, res) => {
+    console.log("verifying face");
+    
     try {
         const { predictedData, uid } = req.params
         const minDist = 999;
         const currDist = 0.0;
         const userId = "";
 
-        print('users.length=> ${users.length}');
-
         for (const uId in users.keys()) {
             currDist = _euclideanDistance(users[uId], predictedData);
+            console.log(currDist);
             if (currDist <= threshold && currDist < minDist) {
                 minDist = currDist;
                 userId = uId;
