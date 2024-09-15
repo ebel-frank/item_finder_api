@@ -27,6 +27,19 @@ async function loadFirestoreData() {
     })
 }
 
+function _euclideanDistance(e1, e2) {
+    if (!e1 || !e2) {
+        throw new Error("Null argument");
+    }
+
+    let sum = 0.0;
+    for (let i = 0; i < e1.length; i++) {
+        sum += Math.pow((e1[i] - e2[i]), 2);
+    }
+    
+    return Math.sqrt(sum);
+}
+
 loadFirestoreData()
 
 router.get('/api/verify_face', async (req, res) => {
