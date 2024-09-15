@@ -10,7 +10,7 @@ admin.initializeApp({
 });
 
 const embeddings = {}
-const threshold = 0.5
+const threshold = 0.9
 
 const db = admin.firestore()
 async function loadFirestoreData() {
@@ -44,22 +44,35 @@ loadFirestoreData()
 
 router.post('/api/verify_face', async (req, res) => {
     console.log("verifying face");
-    
+
     try {
         const { predictedData, uid } = req.body
-        const minDist = 999;
-        const currDist = 0.0;
-        const userId = "";
+
+        const _ensemble_list = { '0': ["", 999], '1': ["", 999], '2': ["", 999], '3': ["", 999] }
 
         for (const uId of Object.keys(embeddings)) {
-            currDist = _euclideanDistance(embeddings[uId], predictedData);
-            console.log(currDist);
-            if (currDist <= threshold && currDist < minDist) {
-                minDist = currDist;
-                userId = uId;
+            var currDist = 0.0;
+            for (let i = 0; i < 4; i++) {
+                currDist = _euclideanDistance(embeddings[uId][`${i}`], predictedData[`${i}`]);
+                
+                if (currDist <= threshold && currDist < _ensemble_list[`${i}`][1]) {
+                    _ensemble_list[`${i}`][0] = uid
+                    _ensemble_list[`${i}`][1] = currDist
+                }
             }
         }
-        res.status(200).json({'prediction': uid == userId}) // check if the userId of the predicted embeddings is same as actual user id
+
+        // Get the max occurence of userId
+        const occurrences = {}
+        for (let i = 0; i < 4; i++) {
+            const uId = _ensemble_list[`${i}`][0]
+            occurrences[uId] = (occurrences[uId] || 0) + 1;
+        }
+        const max_userId = Object.keys(occurrences).reduce((a, b) => {
+            return occurrences[a] > occurrences[b] ? a : b;
+        });
+        
+        res.status(200).json({ 'prediction': uid == max_userId }) // check if the userId of the predicted embeddings is same as actual user id
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
