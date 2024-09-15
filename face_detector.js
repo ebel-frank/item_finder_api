@@ -36,17 +36,17 @@ function _euclideanDistance(e1, e2) {
     for (let i = 0; i < e1.length; i++) {
         sum += Math.pow((e1[i] - e2[i]), 2);
     }
-    
+
     return Math.sqrt(sum);
 }
 
 loadFirestoreData()
 
-router.get('/api/verify_face', async (req, res) => {
+router.post('/api/verify_face', async (req, res) => {
     console.log("verifying face");
     
     try {
-        const { predictedData, uid } = req.params
+        const { predictedData, uid } = req.body
         const minDist = 999;
         const currDist = 0.0;
         const userId = "";
