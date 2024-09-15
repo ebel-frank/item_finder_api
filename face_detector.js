@@ -39,7 +39,7 @@ router.get('/api/verify_face', async (req, res) => {
         const userId = "";
 
         for (const uId in users.keys()) {
-            currDist = _euclideanDistance(users[uId], predictedData);
+            currDist = _euclideanDistance(embeddings[uId], predictedData);
             console.log(currDist);
             if (currDist <= threshold && currDist < minDist) {
                 minDist = currDist;
