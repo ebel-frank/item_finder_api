@@ -9,9 +9,8 @@ router.post('/mark_attendees', async (req, res) => {
     const attendees = req.body; // The incoming dictionary from the Python request
 
     try {
-
         // Iterate over each entry in the incoming data
-        for (const [matric_num, details] of Object.entries(attendees)) {
+        for (const [matric_num, details] of Object.entries(attendees)) { 
             const [_, name, timestamp] = details.split(',');
 
             // Create a new attendee document
@@ -53,7 +52,6 @@ router.post('/register', async (req, res) => {
 
 // GET all students
 router.get('/students', async (req, res) => {
-
     try {
       const students = await Student.find();
       res.status(200).json(students);
@@ -65,7 +63,6 @@ router.get('/students', async (req, res) => {
 
   // GET all attendees
 router.get('/attendees', async (req, res) => {
-    
     try {
       const attendees = await Attendee.find();
       res.status(200).json(attendees);

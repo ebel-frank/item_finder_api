@@ -4,12 +4,14 @@ const express = require('express')
 const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
 const faceRecognitionRoute = require('./face_recognition')
+const plantMonitorRoute = require('./plant_monitor')
 
 const app = express()
 
 app.use(express.json())
 app.use(faceDetectorRoute)
 app.use(faceRecognitionRoute)
+app.use(plantMonitorRoute)
 const PORT = 5000
 
 // Endpoint to POST location

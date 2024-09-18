@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const StateSchema = new mongoose.Schema({
-  led_state: {
+  rain_state: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  pump_state: {
     type: Boolean,
     required: true,
     default: false
