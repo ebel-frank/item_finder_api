@@ -3,11 +3,13 @@ const mongoose = require('mongoose')
 const express = require('express')
 const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
+const faceRecognitionRoute = require('./face_recognition')
 
 const app = express()
 
 app.use(express.json())
 app.use(faceDetectorRoute)
+app.use(faceRecognitionRoute)
 const PORT = 5000
 
 // Endpoint to POST location
