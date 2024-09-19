@@ -1,6 +1,9 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
 const express = require('express')
+const http = require('http');
+const { Server } = require('socket.io');
+const State = require('./models/State')
 const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
 const faceRecognitionRoute = require('./face_recognition')
@@ -93,12 +96,20 @@ app.get('/api/buzzer', async (req, res) => {
     }
 })
 
+const server = http.createServer(app);
+const io = new Server(server);
+
+// Listen for changes to mongodb database
+State.watch().on('change', (change) => {
+    io.emit('stateUpdate', change);
+});
+
 // connect to mongodb
 mongoose.connect(process.env.MONGODB_URI)
     .then((result) => {
         console.log("Connected to DB")
         // Use server instead of app
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log('Server started on port ' + PORT);
         })
     })

@@ -72,6 +72,7 @@ router.post('/api/soil_value', async (req, res) => {
   }
 });
 
+
 // Upload image route
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
