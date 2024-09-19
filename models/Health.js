@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const SoilSchema = new Schema({
-    moisture: {
+const HealthSchema = new Schema({
+    heart_rate: {
         type: Number,
         required: true
     },
@@ -12,4 +12,4 @@ const SoilSchema = new Schema({
     }
 })
 
-module.exports = mongoose.model('Soil', SoilSchema)
+module.exports = mongoose.model('Health', HealthSchema)

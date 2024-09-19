@@ -5,6 +5,7 @@ const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
 const faceRecognitionRoute = require('./face_recognition')
 const plantMonitorRoute = require('./plant_monitor')
+const healthMonitorRoute = require('./health_monitor')
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.use(express.json())
 app.use(faceDetectorRoute)
 app.use(faceRecognitionRoute)
 app.use(plantMonitorRoute)
+app.use(healthMonitorRoute)
 const PORT = 5000
 
 // Endpoint to POST location
@@ -90,8 +92,6 @@ app.get('/api/buzzer', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 })
-
-
 
 // connect to mongodb
 mongoose.connect(process.env.MONGODB_URI)

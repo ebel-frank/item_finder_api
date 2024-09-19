@@ -10,7 +10,11 @@ const StateSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
-  }
+  },
+  battery: {
+    type: Number,
+    required: true,
+}
 });
 
 module.exports = mongoose.model('State', StateSchema);
