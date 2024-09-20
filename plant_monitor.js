@@ -61,13 +61,29 @@ router.post('/api/soil_value', async (req, res) => {
   }
 
   try {
-    let Soil = new Soil({moisture});
-    await Soil.save();
+    let soil = new Soil({moisture});
+    await soil.save();
     let state = await State.findOne();
     state.battery = battery;
     await state.save();
-    res.send({ pump_state: state.pump_state });
+    res.send({ message: "Success" });
   } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: 'Server error' });
+  }
+});
+
+router.get('/api/soil_values', async (req, res) => {
+  try {
+    // Set default limit to 20 if not specified
+    const limit = parseInt(req.query.limit) || 20;
+
+    // Fetch the items from the Soil collection with the specified limit
+    const soilValues = await Soil.find().limit(limit);
+
+    res.send(soilValues);
+  } catch (err) {
+    console.log(err);
     res.status(500).send({ message: 'Server error' });
   }
 });

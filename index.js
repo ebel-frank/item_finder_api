@@ -94,7 +94,6 @@ app.get('/api/buzzer', async (req, res) => {
 })
 
 
-
 // connect to mongodb
 mongoose.connect(process.env.MONGODB_URI)
     .then((result) => {

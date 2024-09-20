@@ -6,10 +6,6 @@ const SoilSchema = new Schema({
         type: Number,
         required: true
     },
-    battery: {
-        type: Number,
-        required: true,
-    }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model('Soil', SoilSchema)
