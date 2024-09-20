@@ -14,6 +14,10 @@ const StateSchema = new mongoose.Schema({
   battery: {
     type: Number,
     required: true,
+},
+prediction: {
+  type: Number,
+  required: true,
 }
 });
 

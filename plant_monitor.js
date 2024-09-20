@@ -110,7 +110,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
       },
       body: req.file.buffer
     };
-    request(options, (error, response, body) => {
+    request(options, async (error, response, body) => {
       if (error) {
         console.error('Error sending image to AWS AI model:', error);
         return res.status(500).json({ error: 'Failed to process image' });
@@ -118,7 +118,9 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
       try {
         const prediction = JSON.parse(body).prediction;
-        console.log(prediction);
+        let state = await State.findOne();
+        state.prediction = prediction;
+        await state.save();
 
         res.json({ prediction: prediction });
       } catch (err) {
