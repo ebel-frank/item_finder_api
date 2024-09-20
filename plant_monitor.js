@@ -62,7 +62,7 @@ router.post('/api/soil_value', async (req, res) => {
   }
 
   try {
-    let soil = new Soil({moisture});
+    let soil = new Soil({ moisture });
     await soil.save();
     let state = await State.findOne();
     state.battery = battery;
@@ -93,59 +93,59 @@ router.get('/api/soil_values', async (req, res) => {
 // Upload image route
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
-      const image = new Image({
-          data: req.file.buffer,
-          contentType: req.file.mimetype
-      });
+    const image = new Image({
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    });
 
-      await Image.deleteMany(); // Delete existing images
-      await image.save();
-      res.json({ message: 'Image uploaded successfully' });
+    await Image.deleteMany(); // Delete existing images
+    await image.save();
+    // res.json({ message: 'Image uploaded successfully' });
 
-      const options = {
-        method: 'POST',
-        url: 'http://34.226.123.43/upload',
-        headers: {
-            'Content-Type': req.file.mimetype
-        },
-        body: req.file.buffer
+    const options = {
+      method: 'POST',
+      url: 'http://34.226.123.43/upload',
+      headers: {
+        'Content-Type': req.file.mimetype
+      },
+      body: req.file.buffer
     };
-      request(options, (error, response, body) => {
-        if (error) {
-            console.error('Error sending image to AWS AI model:', error);
-            return res.status(500).json({ error: 'Failed to process image' });
-        }
+    request(options, (error, response, body) => {
+      if (error) {
+        console.error('Error sending image to AWS AI model:', error);
+        return res.status(500).json({ error: 'Failed to process image' });
+      }
 
-        try {
-            const prediction = JSON.parse(body).prediction;
-            console.log(prediction);
-            
-            res.json({ prediction: prediction });
-        } catch (err) {
-            console.error('Error parsing response from AWS AI model:', err);
-            res.status(500).json({ error: 'Failed to process response' });
-        }
+      try {
+        const prediction = JSON.parse(body).prediction;
+        console.log(prediction);
+
+        res.json({ prediction: prediction });
+      } catch (err) {
+        console.error('Error parsing response from AWS AI model:', err);
+        res.status(500).json({ error: 'Failed to process response' });
+      }
     });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'An error occurred' });
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
   }
 });
 
 // Get image route
 router.get('/image', async (req, res) => {
   try {
-      const image = await Image.findOne();
+    const image = await Image.findOne();
 
-      if (!image) {
-          return res.status(404).json({ error: 'Image not found' });
-      }
+    if (!image) {
+      return res.status(404).json({ error: 'Image not found' });
+    }
 
-      res.set('Content-Type', image.contentType);
-      res.send(image.data);
+    res.set('Content-Type', image.contentType);
+    res.send(image.data);
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'An error occurred' });
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
   }
 });
 
