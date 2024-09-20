@@ -101,6 +101,7 @@ const io = new Server(server);
 
 // Listen for changes to mongodb database
 State.watch().on('change', (change) => {
+    console.log(change);
     io.emit('stateUpdate', change);
 });
 
