@@ -4,6 +4,7 @@ const Soil = require('./models/Soil')
 const State = require('./models/State')
 const multer = require('multer');
 const Image = require('./models/Images');
+const request = require('request')
 
 // Configure multer storage
 const storage = multer.memoryStorage();
@@ -99,8 +100,30 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
       await Image.deleteMany(); // Delete existing images
       await image.save();
-
       res.json({ message: 'Image uploaded successfully' });
+
+      const options = {
+        method: 'POST',
+        url: 'http://34.226.123.43/upload',
+        headers: {
+            'Content-Type': req.file.mimetype
+        },
+        body: req.file.buffer
+    };
+      request(options, (error, response, body) => {
+        if (error) {
+            console.error('Error sending image to AWS AI model:', error);
+            return res.status(500).json({ error: 'Failed to process image' });
+        }
+
+        try {
+            const prediction = JSON.parse(body).prediction;
+            res.json({ prediction: prediction });
+        } catch (err) {
+            console.error('Error parsing response from AWS AI model:', err);
+            res.status(500).json({ error: 'Failed to process response' });
+        }
+    });
   } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'An error occurred' });
