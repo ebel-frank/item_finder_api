@@ -1,8 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
 const express = require('express')
-const http = require('http');
-const { Server } = require('socket.io');
 const State = require('./models/State')
 const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
@@ -11,6 +9,15 @@ const plantMonitorRoute = require('./plant_monitor')
 const healthMonitorRoute = require('./health_monitor')
 
 const app = express()
+const server = require('http').createServer(app);
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*", // Adjust according to your needs
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type"],
+        credentials: true
+    }
+})
 
 app.use(express.json())
 app.use(faceDetectorRoute)
@@ -95,9 +102,6 @@ app.get('/api/buzzer', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 })
-
-const server = http.createServer(app);
-const io = new Server(server);
 
 // Listen for changes to mongodb database
 State.watch().on('change', (change) => {
