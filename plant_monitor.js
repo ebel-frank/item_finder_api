@@ -118,6 +118,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
         try {
             const prediction = JSON.parse(body).prediction;
+            console.log(prediction);
+            
             res.json({ prediction: prediction });
         } catch (err) {
             console.error('Error parsing response from AWS AI model:', err);
