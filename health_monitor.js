@@ -64,7 +64,7 @@ router.post('/api/health_data', async (req, res) => {
     await health.save();
     res.send({ heart_rate: health.heart_rate, temp: health.temp});
   } catch (err) {
-    res.status(500).send({ message: 'Server error' });
+    res.status(500).send({ message: `Server error  ${err}` });
   }
 });
 
