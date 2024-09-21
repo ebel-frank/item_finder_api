@@ -6,7 +6,7 @@ const HealthSchema = new Schema({
         type: Number,
         required: true
     },
-    battery: {
+    temp: {
         type: Number,
         required: true,
     }

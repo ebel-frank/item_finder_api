@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Health = require('./models/Health')
+const { Blockchain, Block } = require("./models/blockchain");
 
 // GET route to retrieve led_state
 // router.get('/api/rain_state', async (req, res) => {
@@ -43,20 +44,32 @@ const Health = require('./models/Health')
 //   }
 // });
 
+let blockchain = new Blockchain();
+
 router.post('/api/health_data', async (req, res) => {
-  const { heart_rate, battery } = req.body;
+  const { heart_rate, temp } = req.body;
   if (!heart_rate || !battery) {
     return res.status(400).send({ message: 'Missing required values' });
   }
-
   try {
-    let health = new Health({heart_rate, battery});
+    const certificateId = generateCertificateId();
+    const newBlock = new Block(blockchain.chain.length, new Date().toString(), {
+      certificateId,
+      heart_rate,
+      temp
+    });
+    blockchain.addBlock(newBlock);
+    let health = new Health(newBlock.toMap());
     await health.save();
     res.send({ heart_rate: health.heart_rate, battery: health.battery});
   } catch (err) {
     res.status(500).send({ message: 'Server error' });
   }
 });
+
+function generateCertificateId() {
+  return Math.random().toString(36).substring(2, 10);
+}
 
 
 module.exports = router
