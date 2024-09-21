@@ -90,7 +90,7 @@ router.get('/api/notify_motion', async (req, res) => {
     await alert.save();
     res.status(200).json({message: "Success"});
   } catch (err) {
-    res.status(500).send({ message: 'Server error' });
+    res.status(500).send({ message: `Server error: ${err}` });
   }
 });
 
