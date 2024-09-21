@@ -13,9 +13,6 @@ const upload = multer({ storage: storage });
 
 router.put('/api/rain_state', async (req, res) => {
   const { rain_state } = req.body;
-  if (typeof rain_state !== 'boolean') {
-    return res.status(400).send({ message: 'Invalid value for rain_state' });
-  }
 
   try {
     let state = await State.findOne();
