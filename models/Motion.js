@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const MotionSchema = new mongoose.Schema({
   alert: {
-    type: Boolean,
+    type: String,
     required: true,
     default: "Motion detected"
   },

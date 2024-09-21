@@ -88,7 +88,7 @@ router.get('/api/notify_motion', async (req, res) => {
   try {
     let alert = new Motion({ alert: "Motion detected" });
     await alert.save();
-    res.status(200).json({message: "Success"});
+    res.status(200).json({ message: "Success" });
   } catch (err) {
     res.status(500).send({ message: `Server error: ${err}` });
   }
