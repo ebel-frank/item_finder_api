@@ -86,11 +86,9 @@ router.get('/api/soil_values', async (req, res) => {
 
 router.get('/api/notify_motion', async (req, res) => {
   try {
-    const state = await State.findOne(); // Assuming there's only one document
-    if (!state) {
-      return res.status(404).send({ message: 'Soil data not found' });
-    }
-    res.send(state);
+    let alert = new Motion({ alert: "Motion detected" });
+    await alert.save();
+    res.status(200).json({message: "Success"});
   } catch (err) {
     res.status(500).send({ message: 'Server error' });
   }
