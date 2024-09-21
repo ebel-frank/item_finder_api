@@ -38,9 +38,6 @@ router.get('/api/soil_state', async (req, res) => {
 
 router.put('/api/pump_state', async (req, res) => {
   const { pump_state } = req.body;
-  if (typeof pump_state !== 'boolean') {
-    return res.status(400).send({ message: 'Invalid value for pump_state' });
-  }
 
   try {
     let state = await State.findOne();
