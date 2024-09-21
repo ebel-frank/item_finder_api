@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Soil = require('./models/Soil')
 const State = require('./models/State')
+const Motion = require('./models/Motion')
 const multer = require('multer');
 const Image = require('./models/Images');
 const request = require('request')
@@ -45,7 +46,7 @@ router.put('/api/pump_state', async (req, res) => {
     await state.save();
     res.send({ pump_state: state.pump_state });
   } catch (err) {
-    res.status(500).send({ message: 'Server error' });
+    res.status(500).send({ message: `Server error: ${err}` });
   }
 });
 
@@ -79,6 +80,18 @@ router.get('/api/soil_values', async (req, res) => {
     res.send(soilValues);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ message: 'Server error' });
+  }
+});
+
+router.get('/api/notify_motion', async (req, res) => {
+  try {
+    const state = await State.findOne(); // Assuming there's only one document
+    if (!state) {
+      return res.status(404).send({ message: 'Soil data not found' });
+    }
+    res.send(state);
+  } catch (err) {
     res.status(500).send({ message: 'Server error' });
   }
 });
