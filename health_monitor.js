@@ -49,7 +49,7 @@ let blockchain = new Blockchain();
 router.post('/api/health_data', async (req, res) => {
   const { heart_rate, temp, oxygen } = req.body;
   if (!heart_rate || !temp || !oxygen) {
-    return res.status(400).send({ message: 'Missing required values' });
+    return res.status(400).send({ message: `Missing required values ${heart_rate} ${temp} ${oxygen}` });
   }
   try {
     const certificateId = generateCertificateId();
