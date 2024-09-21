@@ -94,6 +94,17 @@ router.get('/api/notify_motion', async (req, res) => {
   }
 });
 
+router.get('/api/alerts', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 20;
+    // Fetch the items from the Motion collections
+    const alerts = await Motion.find().limit(limit);
+
+    res.send(alerts);
+  } catch (err) {
+    res.status(500).send({ message: 'Server error' });
+  }
+});
 
 // Upload image route
 router.post('/upload', upload.single('image'), async (req, res) => {
