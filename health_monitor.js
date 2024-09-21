@@ -47,8 +47,8 @@ const { Blockchain, Block } = require("./models/blockchain");
 let blockchain = new Blockchain();
 
 router.post('/api/health_data', async (req, res) => {
-  const { heart_rate, temp } = req.body;
-  if (!heart_rate || !battery) {
+  const { heart_rate, temp, oxygen } = req.body;
+  if (!heart_rate || !temp || !oxygen) {
     return res.status(400).send({ message: 'Missing required values' });
   }
   try {
@@ -56,12 +56,13 @@ router.post('/api/health_data', async (req, res) => {
     const newBlock = new Block(blockchain.chain.length, new Date().toString(), {
       certificateId,
       heart_rate,
-      temp
+      temp,
+      oxygen
     });
     blockchain.addBlock(newBlock);
     let health = new Health(newBlock.toMap());
     await health.save();
-    res.send({ heart_rate: health.heart_rate, battery: health.battery});
+    res.send({ heart_rate: health.heart_rate, temp: health.temp});
   } catch (err) {
     res.status(500).send({ message: 'Server error' });
   }
