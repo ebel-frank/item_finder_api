@@ -5,6 +5,7 @@ const ItemFinder = require('./ItemFinder')
 const faceDetectorRoute = require('./face_detector')
 const faceRecognitionRoute = require('./face_recognition')
 const plantMonitorRoute = require('./plant_monitor')
+const rescuerRoute = require('./rescuer')
 const healthMonitorRoute = require('./health_monitor')
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(faceDetectorRoute)
 app.use(faceRecognitionRoute)
 app.use(plantMonitorRoute)
 app.use(healthMonitorRoute)
+app.use(rescuerRoute)
 const PORT = 5000
 
 // Endpoint to POST location

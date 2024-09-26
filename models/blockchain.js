@@ -19,12 +19,13 @@ class Block {
   }
 
   toMap() {
+    let data = {index: this.index}
     return {
-      index,
-      timestamp,
-      data,
-      previousHash,
-      hash
+      index: this.index,
+      timestamp: this.timestamp,
+      data: this.data,
+      previousHash: this.previousHash,
+      hash: this.hash
     }
   }
 }

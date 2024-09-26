@@ -48,23 +48,37 @@ let blockchain = new Blockchain();
 
 router.post('/api/health_data', async (req, res) => {
   const { heart_rate, temp, oxygen } = req.body;
-  if (!heart_rate || !temp || !oxygen) {
-    return res.status(400).send({ message: `Missing required values ${heart_rate} ${temp} ${oxygen}` });
-  }
+  // if (!heart_rate || !temp || !oxygen) {
+  //   return res.status(400).send({ message: `Missing required values ${heart_rate} ${temp} ${oxygen}` });
+  // }
   try {
     const certificateId = generateCertificateId();
-    const newBlock = new Block(blockchain.chain.length, new Date().toString(), {
+    const newBlock = new Block(10, new Date().toString(), {
       certificateId,
       heart_rate,
       temp,
       oxygen
     });
     blockchain.addBlock(newBlock);
-    let health = new Health(newBlock.toMap());
+    let health = new Health({heart_rate, temp});
     await health.save();
-    res.send({ heart_rate: health.heart_rate, temp: health.temp});
+    res.status(200).json({ message: "Success"});
   } catch (err) {
     res.status(500).send({ message: `Server error  ${err}` });
+  }
+});
+
+router.get('/api/health_data', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 20;
+    // Fetch the items from the Motion collections
+    const health = await Health.find()
+      .sort({ _id: -1 })
+      .limit(limit);
+
+    res.send(health);
+  } catch (err) {
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
