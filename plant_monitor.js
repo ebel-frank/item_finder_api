@@ -97,7 +97,7 @@ router.get('/api/notify_motion', async (req, res) => {
 router.get('/api/alerts', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
-    // Fetch the items from the Motion collections
+    
     const alerts = await Motion.find()
       .sort({ _id: -1 })
       .limit(limit);
