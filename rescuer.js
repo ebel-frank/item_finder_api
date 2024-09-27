@@ -25,7 +25,7 @@ router.post('/api/alert-contacts', (req, res) => {
 
 This is an emergency. ${user_name} is in immediate danger and has shared their current location with you. As their ${e_relshp}, your prompt action could be critical. Please reach out or seek help immediately.
 
-Location: https://www.google.com/maps/@${long},${lat}.
+Location: https://maps.google.com/?q=${lat},${long}.
 
 Please act immediately.`
     };
