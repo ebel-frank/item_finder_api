@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 router.post('/api/alert-contacts', (req, res) => {
     const { e_email, e_phone, e_name, user_name, e_relshp, lat, long, type } = req.body;
 
-    cont msg = `Hello ${e_name},
+    const msg = `Hello ${e_name},
 
 This is an emergency. ${user_name} is in immediate danger and has shared their current location with you. As their ${e_relshp}, your prompt action could be critical. Please reach out or seek help immediately.
 
@@ -25,11 +25,10 @@ Location: https://maps.google.com/?q=${lat},${long}.
 
 Please act immediately.`
     if (type === 'SMS') {
-        const accountSid = 'ACbcf5aa9d7ae73e2fdb0698922219f800';
-        const client = require('twilio')(accountSid, process.env.AUTH_TOKEN);
+        const client = require('twilio')(process.env.TWILLIO_SID, process.env.AUTH_TOKEN);
         client.messages
             .create({
-                body: 'Hello I would like  to tell you something',
+                body: msg,
                 from: '+19292961968',
                 to: e_phone
             })
@@ -40,7 +39,7 @@ Please act immediately.`
             from: 'businessrevolutionaries@gmail.com',  // Sender address
             to: e_email,  // Recipient's email address (from request body)
             subject: "URGENT: EMERGENCY ALERT",
-            text: 
+            text: msg
         };
 
         // Send the email using Nodemailer
