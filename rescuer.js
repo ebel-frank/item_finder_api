@@ -48,7 +48,7 @@ Please act immediately.`
                 console.log(message.sid)
                 res.status(200).json({ message: 'SMS sent successfully!' });
             });
-    } else if (type == 'Email') {
+    } else if (type === 'Email') {
         // Define the email options
         const mailOptions = {
             from: 'businessrevolutionaries@gmail.com',  // Sender address
