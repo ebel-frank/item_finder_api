@@ -4,7 +4,7 @@ const express = require('express')
 const multer = require('multer');
 const fs = require('fs');
 const router = express.Router()
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage: multer.memoryStorage() });
 
 
 // Set up the transporter for Nodemailer
@@ -57,10 +57,10 @@ Please act immediately.`
             text: msg,
             attachments: [
                 {
-                    filename: image.originalname,
-                    path: image.path
-                }
-            ]
+                  filename: userPhoto.originalname,
+                  content: userPhoto.buffer,
+                },
+              ],
         };
 
         // Send the email using Nodemailer
