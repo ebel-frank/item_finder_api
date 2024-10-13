@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
 
 function convertPhoneNumber(number) {
     if (number.startsWith('0')) {
-      return '+234' + number.slice(1);
+        return '+234' + number.slice(1);
     }
     return number;
-  }
+}
 
 // API endpoint to send an email
 router.post('/api/alert-contacts', (req, res) => {
@@ -42,9 +42,9 @@ Please act immediately.`
             })
             .then(message => {
                 console.log(message.sid)
-                res.status(200).json({ message: 'SMS sent successfully!'});
+                res.status(200).json({ message: 'SMS sent successfully!' });
             });
-    } else {
+    } else if (type == 'Email') {
         // Define the email options
         const mailOptions = {
             from: 'businessrevolutionaries@gmail.com',  // Sender address
@@ -62,6 +62,34 @@ Please act immediately.`
             console.log('Email sent:', info.response);
             res.status(200).json({ message: 'Email sent successfully!' });
         });
+    } else {
+        const client = require('twilio')(process.env.TWILLIO_SID, process.env.AUTH_TOKEN);
+
+        client.messages
+            .create({
+                body: msg,
+                from: '+19292961968',
+                to: convertPhoneNumber(e_phone)
+            })
+            .then(message => {
+                console.log(message.sid)
+            });
+
+        const mailOptions = {
+            from: 'businessrevolutionaries@gmail.com',  // Sender address
+            to: e_email,  // Recipient's email address (from request body)
+            subject: "URGENT: EMERGENCY ALERT",
+            text: msg
+        };
+
+        // Send the email using Nodemailer
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+            }
+            console.log('Email sent:', info.response);
+        });
+        res.status(200).json({ message: 'Both Email and SMS sent successfully!' });
     }
 });
 
