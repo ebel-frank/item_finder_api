@@ -13,6 +13,13 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+function convertPhoneNumber(number) {
+    if (number.startsWith('0')) {
+      return '+234' + number.slice(1);
+    }
+    return number;
+  }
+
 // API endpoint to send an email
 router.post('/api/alert-contacts', (req, res) => {
     const { e_email, e_phone, e_name, user_name, e_relshp, lat, long, type } = req.body;
@@ -26,13 +33,17 @@ Location: https://maps.google.com/?q=${lat},${long}.
 Please act immediately.`
     if (type === 'SMS') {
         const client = require('twilio')(process.env.TWILLIO_SID, process.env.AUTH_TOKEN);
+
         client.messages
             .create({
                 body: msg,
                 from: '+19292961968',
-                to: e_phone
+                to: convertPhoneNumber(e_phone)
             })
-            .then(message => console.log(message.sid));
+            .then(message => {
+                console.log(message.sid)
+                res.status(200).json({ message: 'SMS sent successfully!'});
+            });
     } else {
         // Define the email options
         const mailOptions = {
