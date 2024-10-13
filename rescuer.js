@@ -1,7 +1,10 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 const express = require('express')
+const multer = require('multer');
+const fs = require('fs');
 const router = express.Router()
+const upload = multer({ dest: 'uploads/' });
 
 
 // Set up the transporter for Nodemailer
@@ -21,8 +24,9 @@ function convertPhoneNumber(number) {
 }
 
 // API endpoint to send an email
-router.post('/api/alert-contacts', (req, res) => {
+router.post('/api/alert-contacts', upload.single('image'), (req, res) => {
     const { e_email, e_phone, e_name, user_name, e_relshp, lat, long, type } = req.body;
+    const userPhoto = req.file;
 
     const msg = `Hello ${e_name},
 
@@ -50,11 +54,22 @@ Please act immediately.`
             from: 'businessrevolutionaries@gmail.com',  // Sender address
             to: e_email,  // Recipient's email address (from request body)
             subject: "URGENT: EMERGENCY ALERT",
-            text: msg
+            text: msg,
+            attachments: [
+                {
+                    filename: image.originalname,
+                    path: image.path
+                }
+            ]
         };
 
         // Send the email using Nodemailer
         transporter.sendMail(mailOptions, (error, info) => {
+            // Delete the image after sending the email
+            fs.unlink(image.path, (err) => {
+                if (err) console.error('Failed to delete uploaded image:', err);
+            });
+
             if (error) {
                 console.error('Error sending email:', error);
                 return res.status(500).json({ message: 'Error sending email', error });
