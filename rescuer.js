@@ -57,13 +57,15 @@ Please act immediately.`
             to: e_email,  // Recipient's email address (from request body)
             subject: "URGENT: EMERGENCY ALERT",
             text: msg,
-            attachments: [
+        };
+        if (userPhoto) {
+            mailOptions['attachments'] = [
                 {
                   filename: userPhoto.originalname,
                   content: userPhoto.buffer,
                 },
-              ],
-        };
+              ]
+        }
 
         // Send the email using Nodemailer
         transporter.sendMail(mailOptions, (error, info) => {
@@ -97,13 +99,15 @@ Please act immediately.`
                 to: e_email,  // Recipient's email address (from request body)
                 subject: "URGENT: EMERGENCY ALERT",
                 text: msg,
-                attachments: [
+            };
+            if (userPhoto) {
+                mailOptions['attachments'] = [
                     {
                       filename: userPhoto.originalname,
                       content: userPhoto.buffer,
                     },
-                  ],
-            };
+                  ]
+            }
     
             // Send the email using Nodemailer
             transporter.sendMail(mailOptions, (error, info) => {
