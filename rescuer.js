@@ -27,8 +27,6 @@ function convertPhoneNumber(number) {
 router.post('/api/alert-contacts', upload.single('image'), (req, res) => {
     const { e_email, e_phone, e_name, user_name, e_relshp, lat, long, type } = JSON.parse(req.body.json)
     console.log(`${e_email} ${e_phone} ${e_name} ${user_name} ${e_relshp} ${lat} ${long} ${type}`)
-    // console.log(json)
-    res.status(200).json({ message: 'SMS sent!' });
 
     const userPhoto = req.file;
 
